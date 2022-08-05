@@ -3,7 +3,7 @@
 A simple Material You calculator.
 
 ![Screenshots](arts/screenshots.png)
-![History screen](arts/Screenshot_20220806-002916.png)
+![History screen](arts/Screenshot_20220806-003356.png)
 
 ## Features
 
