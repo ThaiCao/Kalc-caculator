@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="pencil" tools:targetApi="s">@android:color/system_accent1_500</color>
+    <color name="pencil_cap" tools:targetApi="s">@android:color/system_accent1_600</color>
+    <color name="track_1" tools:targetApi="s">@android:color/system_accent1_100</color>
+    <color name="track_2" tools:targetApi="s">@android:color/system_accent1_300</color>
+</resources>
