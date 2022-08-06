@@ -45,7 +45,7 @@ fun AppViewModel.NumberPad(modifier: Modifier = Modifier) {
             ParenthesisKey()
         }
         item {
-            ActionKey(text = "%")
+            ActionKey(text = "^")
         }
         item {
             ActionKey(text = "÷")

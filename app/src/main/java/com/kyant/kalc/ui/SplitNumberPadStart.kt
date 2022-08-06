@@ -38,7 +38,7 @@ fun AppViewModel.SplitNumberPadStart(modifier: Modifier = Modifier) {
             ParenthesisKey(compact = true)
         }
         item {
-            ActionKey(text = "%", compact = true)
+            ActionKey(text = "^", compact = true)
         }
         item {
             ActionKey(

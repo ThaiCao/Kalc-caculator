@@ -4,6 +4,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 import java.util.Stack
+import kotlin.math.pow
 
 object Evaluator {
     private var mathContext = MathContext.DECIMAL64
@@ -11,7 +12,11 @@ object Evaluator {
     private const val OPS = "-+/*^"
 
     fun eval(expr: String): BigDecimal? {
-        return rpnCalculate(infixToPostfix(expr))
+        return try {
+            rpnCalculate(infixToPostfix(expr))
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun infixToPostfix(infix: String): String {
@@ -24,7 +29,7 @@ object Evaluator {
             .replace("×", "*")
             .replace("÷", "/")
             .replace("""(\d+)?(\.\d+)?""".toRegex(), " $0 ")
-            .replace("""[+-/*^()]""".toRegex(), " $0 ")
+            .replace("""[+\-/*^()]""".toRegex(), " $0 ")
             .split(rx)
         ) {
             if (token.isEmpty()) continue
@@ -59,37 +64,33 @@ object Evaluator {
         return sb.toString()
     }
 
-    private fun rpnCalculate(expr: String): BigDecimal? {
-        try {
-            if (expr.isEmpty()) throw IllegalArgumentException("Expression cannot be empty")
-            val tokens = expr.split(' ').filter { it != "" }
-            val stack = mutableListOf<BigDecimal>()
-            for (token in tokens) {
-                val d = token.toBigDecimalOrNull()
-                if (d != null) {
-                    stack.add(d)
-                } else if ((token.length > 1) || (token !in "+-*/^")) {
-                    throw IllegalArgumentException("$token is not a valid token")
-                } else if (stack.size < 2) {
-                    throw IllegalArgumentException("Stack contains too few operands")
-                } else {
-                    val d1 = stack.removeAt(stack.lastIndex)
-                    val d2 = stack.removeAt(stack.lastIndex)
-                    stack.add(
-                        when (token) {
-                            "+" -> d2.add(d1, mathContext)
-                            "-" -> d2.subtract(d1, mathContext)
-                            "*" -> d2.multiply(d1, mathContext)
-                            "/" -> d2.divide(d1, mathContext)
-                            else -> d2.pow(d1, mathContext)
-                        }
-                    )
-                }
+    private fun rpnCalculate(expr: String): BigDecimal {
+        if (expr.isEmpty()) throw IllegalArgumentException("Expression cannot be empty")
+        val tokens = expr.split(' ').filter { it != "" }
+        val stack = mutableListOf<BigDecimal>()
+        for (token in tokens) {
+            val d = token.toBigDecimalOrNull()
+            if (d != null) {
+                stack.add(d)
+            } else if ((token.length > 1) || (token !in "+-*/^")) {
+                throw IllegalArgumentException("$token is not a valid token")
+            } else if (stack.size < 2) {
+                throw IllegalArgumentException("Stack contains too few operands")
+            } else {
+                val d1 = stack.removeAt(stack.lastIndex)
+                val d2 = stack.removeAt(stack.lastIndex)
+                stack.add(
+                    when (token) {
+                        "+" -> d2.add(d1, mathContext)
+                        "-" -> d2.subtract(d1, mathContext)
+                        "*" -> d2.multiply(d1, mathContext)
+                        "/" -> d2.divide(d1, mathContext)
+                        else -> d2.pow(d1, mathContext)
+                    }
+                )
             }
-            return stack.first()
-        } catch (e: Exception) {
-            return null
         }
+        return stack.first()
     }
 
     private fun BigDecimal.pow(n: BigDecimal, mathContext: MathContext): BigDecimal {
@@ -99,10 +100,7 @@ object Evaluator {
         val remainderOfRight = right.remainder(BigDecimal.ONE)
         val n2IntPart = right.subtract(remainderOfRight)
         val intPow = pow(n2IntPart.intValueExact(), mathContext)
-        val doublePow = BigDecimal(
-            Math
-                .pow(toDouble(), remainderOfRight.toDouble())
-        )
+        val doublePow = toDouble().pow(remainderOfRight.toDouble()).toBigDecimal()
 
         var result = intPow.multiply(doublePow, mathContext)
         if (signOfRight == -1) result = BigDecimal
