@@ -37,6 +37,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.kyant.kalc.R
 import com.kyant.kalc.data.AppViewModel
+import com.kyant.kalc.math.Evaluator
 import com.kyant.kalc.theme.Fonts
 import com.kyant.monet.a1
 import com.kyant.monet.n1
@@ -108,7 +109,7 @@ fun AppViewModel.History() {
                     val equalSignColor = 40.a1 withNight 80.a1
                     Text(
                         text = buildAnnotatedString {
-                            exp.text.calc()?.toString()?.let {
+                            Evaluator.eval(exp.text)?.toString()?.let {
                                 withStyle(SpanStyle(color = equalSignColor)) {
                                     append("= ")
                                 }

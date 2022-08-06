@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.kyant.kalc.data.AppViewModel
+import com.kyant.kalc.math.Evaluator
 import com.kyant.kalc.theme.Fonts
 import com.kyant.monet.n1
 import com.kyant.monet.withNight
@@ -95,7 +95,7 @@ fun AppViewModel.ExpressionDisplay(
                 )
             }
             Text(
-                text = result.collectAsState().value?.toEngineeringString()
+                text = Evaluator.eval(expression.text)?.toEngineeringString()
                     ?: "Invalid input".takeIf { expression.text.isNotEmpty() }
                     ?: "",
                 modifier = Modifier
