@@ -68,6 +68,6 @@ object Evaluator {
             val exp = match.value
             t = t.replace(exp, evalExp(exp))
         }
-        return evalExp(t).replace(".00000000000000000", "").toBigDecimalOrNull()
+        return evalExp(t).toBigDecimalOrNull()?.stripTrailingZeros()
     }
 }
