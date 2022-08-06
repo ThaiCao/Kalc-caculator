@@ -3,12 +3,6 @@ package com.kyant.kalc.ui
 import android.app.Activity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.kyant.kalc.data.AppViewModel
 import com.kyant.monet.n1
@@ -32,24 +25,9 @@ import com.kyant.monet.withNight
 @Composable
 fun AppViewModel.Main() {
     val context = LocalContext.current
-    val density = LocalDensity.current
     val windowSizeClass = calculateWindowSizeClass(context as Activity)
     Surface(color = 95.n1 withNight 10.n1) {
-        AnimatedContent(
-            targetState = historyPanelExpanded,
-            transitionSpec = {
-                with(density) {
-                    fadeIn(animationSpec = tween(300, delayMillis = 100)) +
-                        slideInVertically(
-                            animationSpec = tween(300, delayMillis = 100)
-                        ) { (if (historyPanelExpanded) -1 else 1) * 96.dp.roundToPx() } with
-                        fadeOut(animationSpec = tween(100)) +
-                            slideOutVertically(animationSpec = tween(100)) {
-                                (if (historyPanelExpanded) -1 else 1) * 96.dp.roundToPx()
-                            }
-                }
-            }
-        ) {
+        AnimatedContent(targetState = historyPanelExpanded) {
             if (!it) {
                 if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
                     Column(
