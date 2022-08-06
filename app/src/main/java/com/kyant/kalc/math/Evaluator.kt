@@ -14,8 +14,8 @@ object Evaluator {
     fun eval(expr: String): BigDecimal? {
         return try {
             rpnCalculate(infixToPostfix(expr))
-        } catch (e: Exception) {
-            null
+        } catch (_: Exception) {
+            FallbackEvaluator.eval(expr)
         }
     }
 
@@ -61,6 +61,7 @@ object Evaluator {
             }
         }
         while (!s.isEmpty()) sb.append(OPS[s.pop()]).append(' ')
+        println(sb.toString())
         return sb.toString()
     }
 
