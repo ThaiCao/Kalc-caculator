@@ -61,13 +61,13 @@ object Evaluator {
     }
 
     fun evalArithmeticExp(s: String): BigDecimal? {
-        var t = "1.0*$s".replace("""\s""".toRegex(), "").replace("""^\+""".toRegex(), "")
+        var t = "1.00000000000000000*$s".replace("""\s""".toRegex(), "").replace("""^\+""".toRegex(), "")
         val rePara = """\([^()]*\)""".toRegex()
         while (true) {
             val match = rePara.find(t) ?: break
             val exp = match.value
             t = t.replace(exp, evalExp(exp))
         }
-        return evalExp(t).toBigDecimalOrNull()?.stripTrailingZeros()
+        return evalExp(t).replace(".00000000000000000", "").toBigDecimalOrNull()
     }
 }
