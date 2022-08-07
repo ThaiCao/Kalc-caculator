@@ -4,7 +4,14 @@
 
 A simple Material You calculator.
 
+----
+
+Main screen:
+
 ![Screenshots](arts/screenshots.png)
+
+History screen:
+
 ![History screen](arts/Screenshot_20220806-003356.png)
 
 ## Features
